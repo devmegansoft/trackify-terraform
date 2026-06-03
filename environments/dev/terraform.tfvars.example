@@ -1,0 +1,10 @@
+project_id                   = "ivory-cycle-466320-r8"
+region                       = "us-central1"
+environment                  = "dev"
+artifact_registry_repository = "timesheet-portal"
+manage_state_bucket          = false
+
+cloud_sql_enabled  = false
+cloud_sql_password = "CHANGE_ME"
+
+spring_datasource_url = "jdbc:postgresql://YOUR_DB_HOST:5432/timesheetdb"
