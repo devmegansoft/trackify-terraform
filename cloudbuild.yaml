@@ -1,11 +1,32 @@
 substitutions:
   _TF_ENV: dev
   _TF_VARS_FILE: terraform.tfvars
+  # Optional: gs://<state-bucket>/tfvars/<env>/terraform.tfvars (upload real secrets here)
+  _TF_STATE_BUCKET: ivory-cycle-466320-r8-terraform-state
 
 options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
+  - id: prepare-tfvars
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    dir: environments/${_TF_ENV}
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        REMOTE="gs://${_TF_STATE_BUCKET}/tfvars/${_TF_ENV}/${_TF_VARS_FILE}"
+        if gcloud storage stat "$$REMOTE" >/dev/null 2>&1; then
+          echo "Using tfvars from $$REMOTE"
+          gcloud storage cp "$$REMOTE" "${_TF_VARS_FILE}"
+        elif [ -f "${_TF_VARS_FILE}" ]; then
+          echo "Using committed ${_TF_VARS_FILE}"
+        else
+          echo "No ${_TF_VARS_FILE}; copying terraform.tfvars.example"
+          cp terraform.tfvars.example "${_TF_VARS_FILE}"
+        fi
+
   - id: terraform-init
     name: hashicorp/terraform:1.9
     dir: environments/${_TF_ENV}
