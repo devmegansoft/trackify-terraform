@@ -97,6 +97,15 @@ gcloud services enable cloudresourcemanager.googleapis.com --project=ivory-cycle
 gcloud storage buckets create gs://ivory-cycle-466320-r8-terraform-state \
   --location=us-central1 --uniform-bucket-level-access --project=ivory-cycle-466320-r8
 
+# Cloud Build needs these to deploy Cloud Run (run once as project Owner/Admin):
+PROJECT_NUMBER=$(gcloud projects describe ivory-cycle-466320-r8 --format="value(projectNumber)")
+gcloud projects add-iam-policy-binding ivory-cycle-466320-r8 \
+  --member="serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
+  --role="roles/run.admin"
+gcloud projects add-iam-policy-binding ivory-cycle-466320-r8 \
+  --member="serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com" \
+  --role="roles/iam.serviceAccountUser"
+
 cp environments/dev/terraform.tfvars.example environments/dev/terraform.tfvars
 # Edit terraform.tfvars (DB URL, passwords), then upload for Cloud Build (gitignored locally):
 gcloud storage cp environments/dev/terraform.tfvars \

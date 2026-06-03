@@ -26,6 +26,13 @@ variable "manage_state_bucket" {
   default = false
 }
 
+# Cloud Build cannot grant project IAM without roles/resourcemanager.projectIamAdmin.
+# Grant roles/run.admin and roles/iam.serviceAccountUser manually (see README bootstrap).
+variable "manage_cloudbuild_project_iam" {
+  type    = bool
+  default = false
+}
+
 variable "labels" {
   type = map(string)
   default = {

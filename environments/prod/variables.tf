@@ -26,6 +26,11 @@ variable "manage_state_bucket" {
   default = false
 }
 
+variable "manage_cloudbuild_project_iam" {
+  type    = bool
+  default = false
+}
+
 variable "labels" {
   type = map(string)
   default = {
