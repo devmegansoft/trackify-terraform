@@ -1,25 +1,18 @@
-# Topic may already exist from a prior partial apply or manual creation.
-module "pubsub" {
-  source = "../../modules/pubsub"
+# Pub/Sub topics/subscriptions are managed outside Terraform (console/gcloud).
+# Set var.pubsub_timesheet_topic_name to match your existing topic.
 
-  project_id = var.project_id
+removed {
+  from = module.pubsub.google_pubsub_topic.this["timesheet-events"]
 
-  topics = {
-    timesheet-events = {}
+  lifecycle {
+    destroy = false
   }
-
-  subscriptions = {
-    approval-timesheet-events-sub = {
-      topic = "timesheet-events"
-    }
-  }
-
-  labels = local.default_labels
-
-  depends_on = [google_project_service.required_apis]
 }
 
-import {
-  to = module.pubsub.google_pubsub_topic.this["timesheet-events"]
-  id = "projects/${var.project_id}/topics/timesheet-events"
+removed {
+  from = module.pubsub.google_pubsub_subscription.this["approval-timesheet-events-sub"]
+
+  lifecycle {
+    destroy = false
+  }
 }

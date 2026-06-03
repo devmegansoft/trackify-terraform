@@ -33,6 +33,12 @@ variable "manage_cloudbuild_project_iam" {
   default = false
 }
 
+variable "pubsub_timesheet_topic_name" {
+  type        = string
+  default     = "timesheet-events"
+  description = "Existing Pub/Sub topic name (managed outside Terraform)."
+}
+
 variable "labels" {
   type = map(string)
   default = {

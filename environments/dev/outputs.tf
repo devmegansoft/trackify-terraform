@@ -46,12 +46,9 @@ output "cloud_run_services" {
   )
 }
 
-output "pubsub_topics" {
-  value = module.pubsub.topic_names
-}
-
-output "pubsub_subscriptions" {
-  value = module.pubsub.subscription_names
+output "pubsub_timesheet_topic_name" {
+  description = "Pub/Sub topic used by timesheet-service (managed outside Terraform)"
+  value       = var.pubsub_timesheet_topic_name
 }
 
 output "cloud_sql" {
