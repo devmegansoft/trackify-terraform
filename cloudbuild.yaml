@@ -1,5 +1,6 @@
 substitutions:
   _TF_ENV: dev
+  _PROJECT_ID: ivory-cycle-466320-r8
   _TF_VARS_FILE: terraform.tfvars
   # Optional: gs://<state-bucket>/tfvars/<env>/terraform.tfvars (upload real secrets here)
   _TF_STATE_BUCKET: ivory-cycle-466320-r8-terraform-state
@@ -26,6 +27,16 @@ steps:
           echo "No ${_TF_VARS_FILE}; copying terraform.tfvars.example"
           cp terraform.tfvars.example "${_TF_VARS_FILE}"
         fi
+
+  # Required before terraform plan: data.google_project needs Cloud Resource Manager API
+  - id: enable-bootstrap-apis
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args:
+      - services
+      - enable
+      - cloudresourcemanager.googleapis.com
+      - --project=${_PROJECT_ID}
 
   - id: terraform-init
     name: hashicorp/terraform:1.9

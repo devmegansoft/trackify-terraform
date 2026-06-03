@@ -92,6 +92,8 @@ terraform apply -var-file=terraform.tfvars
 ## Bootstrap (once)
 
 ```bash
+gcloud services enable cloudresourcemanager.googleapis.com --project=ivory-cycle-466320-r8
+
 gcloud storage buckets create gs://ivory-cycle-466320-r8-terraform-state \
   --location=us-central1 --uniform-bucket-level-access --project=ivory-cycle-466320-r8
 
