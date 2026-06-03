@@ -44,6 +44,21 @@ steps:
     entrypoint: terraform
     args: ["init", "-input=false"]
 
+  # Pub/Sub is not in config; drop legacy module state without deleting GCP resources
+  - id: terraform-drop-pubsub-state
+    name: hashicorp/terraform:1.9
+    dir: environments/${_TF_ENV}
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        if terraform state list 2>/dev/null | grep -q '^module\.pubsub\.'; then
+          echo "Removing module.pubsub from state (GCP resources unchanged)"
+          terraform state rm -lock=false module.pubsub
+        else
+          echo "No module.pubsub in state; skipping"
+        fi
+
   - id: terraform-validate
     name: hashicorp/terraform:1.9
     dir: environments/${_TF_ENV}
