@@ -3,6 +3,7 @@ region                       = "us-central1"
 environment                  = "dev"
 artifact_registry_repository = "timesheet-portal"
 manage_state_bucket          = false
+pubsub_timesheet_topic_name  = "timesheet-events"
 
 cloud_sql_enabled  = false
 cloud_sql_password = "CHANGE_ME"

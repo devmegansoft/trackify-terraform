@@ -40,12 +40,12 @@ module "timesheet_service" {
     SPRING_DATASOURCE_USERNAME = var.cloud_sql_user
     SPRING_DATASOURCE_PASSWORD = local.timesheet_db_password
     APP_GCP_PUBSUB_ENABLED     = "true"
-    APP_GCP_PUBSUB_TOPIC_NAME  = module.pubsub.topic_ids["timesheet-events"]
+    APP_GCP_PUBSUB_TOPIC_NAME  = var.pubsub_timesheet_topic_name
   }
 
   labels = merge(local.default_labels, { app = "timesheet-service" })
 
-  depends_on = [google_project_service.required_apis, module.pubsub, module.cloud_sql]
+  depends_on = [google_project_service.required_apis, module.cloud_sql]
 }
 
 # ------------------------------------------------------------------------------
@@ -70,12 +70,12 @@ module "approval_pubsub_consumer" {
 
   env_vars = {
     APP_GCP_PUBSUB_ENABLED           = "true"
-    APP_GCP_PUBSUB_SUBSCRIPTION_NAME = module.pubsub.subscription_ids["approval-timesheet-events-sub"]
+    APP_GCP_PUBSUB_SUBSCRIPTION_NAME = "approval-timesheet-events-sub"
   }
 
   labels = merge(local.default_labels, { app = "approval-pubsub-consumer" })
 
-  depends_on = [google_project_service.required_apis, module.pubsub]
+  depends_on = [google_project_service.required_apis]
 }
 
 # ------------------------------------------------------------------------------
@@ -158,7 +158,7 @@ module "notification_service" {
 
   labels = merge(local.default_labels, { app = "notification-service" })
 
-  depends_on = [google_project_service.required_apis, module.pubsub]
+  depends_on = [google_project_service.required_apis]
 }
 
 # ------------------------------------------------------------------------------
@@ -181,5 +181,5 @@ module "reporting_service" {
 
   labels = merge(local.default_labels, { app = "reporting-service" })
 
-  depends_on = [google_project_service.required_apis, module.pubsub]
+  depends_on = [google_project_service.required_apis]
 }
