@@ -96,7 +96,12 @@ gcloud storage buckets create gs://ivory-cycle-466320-r8-terraform-state \
   --location=us-central1 --uniform-bucket-level-access --project=ivory-cycle-466320-r8
 
 cp environments/dev/terraform.tfvars.example environments/dev/terraform.tfvars
+# Edit terraform.tfvars (DB URL, passwords), then upload for Cloud Build (gitignored locally):
+gcloud storage cp environments/dev/terraform.tfvars \
+  gs://ivory-cycle-466320-r8-terraform-state/tfvars/dev/terraform.tfvars
 ```
+
+Cloud Build loads `terraform.tfvars` from that GCS path when present; otherwise it falls back to `terraform.tfvars.example`.
 
 ## State isolation
 
