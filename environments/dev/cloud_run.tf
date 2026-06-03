@@ -3,7 +3,7 @@
 
 locals {
   timesheet_service_enabled          = true
-  approval_pubsub_consumer_enabled   = true
+  approval_pubsub_consumer_enabled   = false
   approval_service_enabled           = false
   project_service_enabled            = false
   user_service_enabled               = false
@@ -26,7 +26,7 @@ module "timesheet_service" {
   environment = var.environment
 
   service_name    = "timesheet-service"
-  container_image = "${local.image}/timesheet-service:latest"
+  container_image = "${local.image}/timesheet-service:5fba85b82c28"
 
   min_instances          = 0
   max_instances          = 3
