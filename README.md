@@ -48,7 +48,7 @@ trackify-terraform/
 
 ## Deploy timesheet-service (dev)
 
-1. Build image → Artifact Registry.
+1. Build image → Artifact Registry
 2. Edit **`environments/dev/cloud_run.tf`** — update `container_image` tag.
 3. Edit **`environments/dev/terraform.tfvars`** — DB settings (`cloud_sql_enabled`, passwords).
 4. Merge to `main`.
